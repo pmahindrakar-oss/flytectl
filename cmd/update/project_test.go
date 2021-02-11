@@ -56,8 +56,9 @@ func teardownAndVerify(t *testing.T, expectedLog string) {
 	os.Stdout = stdOut
 	os.Stderr = stderr
 	var buf bytes.Buffer
-	io.Copy(&buf, reader)
-	assert.Equal(t, expectedLog, buf.String())
+	if _, err := io.Copy(&buf, reader); err != nil {
+		assert.Equal(t, expectedLog, buf.String())
+	}
 }
 
 func modifyProjectFlags(archiveProject *bool, newArchiveVal bool, activateProject *bool, newActivateVal bool) {
@@ -70,7 +71,8 @@ func TestActivateProjectFunc(t *testing.T) {
 	defer teardownAndVerify(t, "Project dummyProject updated to ACTIVE state\n")
 	modifyProjectFlags(&(projectConfig.ArchiveProject), false, &(projectConfig.ActivateProject), true)
 	mockClient.OnUpdateProjectMatch(ctx, projectUpdateRequest).Return(nil, nil)
-	updateProjectsFunc(ctx, args, cmdCtx)
+	err := updateProjectsFunc(ctx, args, cmdCtx)
+	assert.Nil(t, err)
 	mockClient.AssertCalled(t, "UpdateProject", ctx, projectUpdateRequest)
 }
 
@@ -79,7 +81,8 @@ func TestActivateProjectFuncWithError(t *testing.T) {
 	defer teardownAndVerify(t, "Project dummyProject failed to get updated to ACTIVE state due to Error Updating Project\n")
 	modifyProjectFlags(&(projectConfig.ArchiveProject), false, &(projectConfig.ActivateProject), true)
 	mockClient.OnUpdateProjectMatch(ctx, projectUpdateRequest).Return(nil, errors.New("Error Updating Project"))
-	updateProjectsFunc(ctx, args, cmdCtx)
+	err := updateProjectsFunc(ctx, args, cmdCtx)
+	assert.Nil(t, err)
 	mockClient.AssertCalled(t, "UpdateProject", ctx, projectUpdateRequest)
 }
 
@@ -106,7 +109,8 @@ func TestArchiveProjectFuncWithError(t *testing.T) {
 		State: admin.Project_ARCHIVED,
 	}
 	mockClient.OnUpdateProjectMatch(ctx, projectUpdateRequest).Return(nil, errors.New("Error Updating Project"))
-	updateProjectsFunc(ctx, args, cmdCtx)
+	err := updateProjectsFunc(ctx, args, cmdCtx)
+	assert.Nil(t, err)
 	mockClient.AssertCalled(t, "UpdateProject", ctx, projectUpdateRequest)
 }
 
@@ -116,7 +120,8 @@ func TestEmptyProjectInput(t *testing.T) {
 	config.GetConfig().Project = ""
 	modifyProjectFlags(&(projectConfig.ArchiveProject), false, &(projectConfig.ActivateProject), true)
 	mockClient.OnUpdateProjectMatch(ctx, projectUpdateRequest).Return(nil, nil)
-	updateProjectsFunc(ctx, args, cmdCtx)
+	err := updateProjectsFunc(ctx, args, cmdCtx)
+	assert.Nil(t, err)
 	mockClient.AssertNotCalled(t, "UpdateProject", ctx, projectUpdateRequest)
 }
 
@@ -125,6 +130,7 @@ func TestInvalidInput(t *testing.T) {
 	defer teardownAndVerify(t, "Invalid state passed. Specify either activate or archive\n")
 	modifyProjectFlags(&(projectConfig.ArchiveProject), false, &(projectConfig.ActivateProject), false)
 	mockClient.OnUpdateProjectMatch(ctx, projectUpdateRequest).Return(nil, nil)
-	updateProjectsFunc(ctx, args, cmdCtx)
+	err := updateProjectsFunc(ctx, args, cmdCtx)
+	assert.Nil(t, err)
 	mockClient.AssertNotCalled(t, "UpdateProject", ctx, projectUpdateRequest)
 }

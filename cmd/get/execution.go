@@ -2,15 +2,13 @@ package get
 
 import (
 	"context"
-	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/core"
-
 	"github.com/golang/protobuf/proto"
-	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/admin"
-	"github.com/lyft/flytestdlib/logger"
-
 	"github.com/lyft/flytectl/cmd/config"
 	cmdCore "github.com/lyft/flytectl/cmd/core"
 	"github.com/lyft/flytectl/pkg/printer"
+	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/admin"
+	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/core"
+	"github.com/lyft/flytestdlib/logger"
 )
 
 var executionColumns = []printer.Column{

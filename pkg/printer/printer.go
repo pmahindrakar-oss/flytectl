@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"os"
-
 	"github.com/ghodss/yaml"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
@@ -13,6 +11,7 @@ import (
 	"github.com/landoop/tableprinter"
 	"github.com/lyft/flytestdlib/errors"
 	"github.com/yalp/jsonpath"
+	"os"
 )
 
 //go:generate enumer --type=OutputFormat -json -yaml -trimprefix=OutputFormat
@@ -65,12 +64,12 @@ func extractRow(data interface{}, columns []Column) []string {
 // Potential performance problem, as it returns all the rows in memory.
 // We could use the render row, but that may lead to misalignment.
 // TODO figure out a more optimal way
-func projectColumns(rows []interface{}, column []Column) ([][]string, error) {
+func projectColumns(rows []interface{}, column []Column) ([][]string) {
 	responses := make([][]string, 0, len(rows))
 	for _, row := range rows {
 		responses = append(responses, extractRow(row, column))
 	}
-	return responses, nil
+	return responses
 }
 
 func (p Printer) JSONToTable(jsonRows []byte, columns []Column) error {
@@ -81,10 +80,7 @@ func (p Printer) JSONToTable(jsonRows []byte, columns []Column) error {
 	if rawRows == nil {
 		return errors.Errorf("JSONUnmarshalNil", "expected one row or empty rows, received nil")
 	}
-	rows, err := projectColumns(rawRows, columns)
-	if err != nil {
-		return err
-	}
+	rows:= projectColumns(rawRows, columns)
 	printer := tableprinter.New(os.Stdout)
 	// TODO make this configurable
 	printer.AutoWrapText = false

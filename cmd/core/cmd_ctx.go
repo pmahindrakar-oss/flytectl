@@ -1,9 +1,8 @@
 package cmdcore
 
 import (
-	"io"
-
 	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/service"
+	"io"
 )
 
 type CommandContext struct {

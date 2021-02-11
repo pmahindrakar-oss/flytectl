@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	cmdCore "github.com/lyft/flytectl/cmd/core"
 	"github.com/lyft/flytectl/pkg/printer"
 	"github.com/lyft/flytestdlib/logger"
@@ -56,6 +57,8 @@ func registerFromFilesFunc(ctx context.Context, args []string, cmdCtx cmdCore.Co
 		registerResults = append(registerResults, registerResult)
 	}
 	payload, _ := json.Marshal(registerResults)
-	adminPrinter.JSONToTable(payload, projectColumns)
+	if err := adminPrinter.JSONToTable(payload, projectColumns); err != nil {
+		return err
+	}
 	return nil
 }

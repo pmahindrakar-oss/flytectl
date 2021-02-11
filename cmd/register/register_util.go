@@ -131,16 +131,22 @@ func hydrateNode(node *core.Node) error {
 		}
 	case *core.Node_BranchNode:
 		branchNodeWrapper := targetNode.(*core.Node_BranchNode)
-		hydrateNode(branchNodeWrapper.BranchNode.IfElse.Case.ThenNode)
+		if err := hydrateNode(branchNodeWrapper.BranchNode.IfElse.Case.ThenNode); err != nil {
+			return err
+		}
 		if len(branchNodeWrapper.BranchNode.IfElse.Other) > 0 {
 			for _, ifBlock := range branchNodeWrapper.BranchNode.IfElse.Other {
-				hydrateNode(ifBlock.ThenNode)
+				if err := hydrateNode(ifBlock.ThenNode); err != nil {
+					return err
+				}
 			}
 		}
 		switch branchNodeWrapper.BranchNode.IfElse.Default.(type) {
 		case *core.IfElseBlock_ElseNode:
 			elseNodeReference := branchNodeWrapper.BranchNode.IfElse.Default.(*core.IfElseBlock_ElseNode)
-			hydrateNode(elseNodeReference.ElseNode)
+			if err := hydrateNode(elseNodeReference.ElseNode); err != nil {
+				return err
+			}
 		case *core.IfElseBlock_Error:
 			// Do nothing.
 		default:

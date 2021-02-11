@@ -2,7 +2,6 @@ package get
 
 import (
 	cmdcore "github.com/lyft/flytectl/cmd/core"
-
 	"github.com/spf13/cobra"
 )
 

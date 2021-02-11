@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/lyft/flytectl/cmd/get"
+
 	"github.com/lyft/flytectl/cmd/register"
 	"github.com/lyft/flytectl/cmd/update"
 	"github.com/lyft/flytectl/pkg/printer"
