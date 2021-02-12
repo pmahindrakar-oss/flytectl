@@ -2,6 +2,7 @@ package get
 
 import (
 	cmdcore "github.com/lyft/flytectl/cmd/core"
+
 	"github.com/spf13/cobra"
 )
 
@@ -181,7 +182,7 @@ func CreateGetCommand() *cobra.Command {
 	getCmd := &cobra.Command{
 		Use:   "get",
 		Short: getCmdShort,
-		Long: getCmdLong,
+		Long:  getCmdLong,
 	}
 
 	getResourcesFuncs := map[string]cmdcore.CommandEntry{

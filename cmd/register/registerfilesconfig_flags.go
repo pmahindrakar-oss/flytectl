@@ -13,7 +13,7 @@ import (
 
 // If v is a pointer, it will get its element value or the zero value of the element type.
 // If v is not a pointer, it will return it as is.
-func (RegisterFilesConfig) elemValueOrNil(v interface{}) interface{} {
+func (FilesConfig) elemValueOrNil(v interface{}) interface{} {
 	if t := reflect.TypeOf(v); t.Kind() == reflect.Ptr {
 		if reflect.ValueOf(v).IsNil() {
 			return reflect.Zero(t.Elem()).Interface()
@@ -27,7 +27,7 @@ func (RegisterFilesConfig) elemValueOrNil(v interface{}) interface{} {
 	return v
 }
 
-func (RegisterFilesConfig) mustMarshalJSON(v json.Marshaler) string {
+func (FilesConfig) mustMarshalJSON(v json.Marshaler) string {
 	raw, err := v.MarshalJSON()
 	if err != nil {
 		panic(err)
@@ -38,9 +38,9 @@ func (RegisterFilesConfig) mustMarshalJSON(v json.Marshaler) string {
 
 // GetPFlagSet will return strongly types pflags for all fields in RegisterFilesConfig and its nested types. The format of the
 // flags is json-name.json-sub-name... etc.
-func (cfg RegisterFilesConfig) GetPFlagSet(prefix string) *pflag.FlagSet {
+func (cfg FilesConfig) GetPFlagSet(prefix string) *pflag.FlagSet {
 	cmdFlags := pflag.NewFlagSet("RegisterFilesConfig", pflag.ExitOnError)
-	cmdFlags.StringVarP(&(filesConfig.version),fmt.Sprintf("%v%v", prefix, "version"), "v", "v1", "version of the entity to be registered with flyte.")
-	cmdFlags.BoolVarP(&(filesConfig.skipOnError), fmt.Sprintf("%v%v", prefix, "skipOnError"), "s", *new(bool), "fail fast when registering files.")
+	cmdFlags.StringVarP(&(filesConfig.Version),fmt.Sprintf("%v%v", prefix, "Version"), "v", "v1", "Version of the entity to be registered with flyte.")
+	cmdFlags.BoolVarP(&(filesConfig.SkipOnError), fmt.Sprintf("%v%v", prefix, "SkipOnError"), "s", *new(bool), "fail fast when registering files.")
 	return cmdFlags
 }

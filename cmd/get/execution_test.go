@@ -3,14 +3,16 @@ package get
 import (
 	"context"
 	"errors"
+	"io"
+	"testing"
+
 	"github.com/lyft/flytectl/cmd/config"
 	cmdCore "github.com/lyft/flytectl/cmd/core"
 	"github.com/lyft/flyteidl/clients/go/admin/mocks"
 	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/admin"
 	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/core"
+
 	"github.com/stretchr/testify/assert"
-	"io"
-	"testing"
 )
 
 const projectValue = "dummyProject"
@@ -89,32 +91,6 @@ func TestListExecutionFuncWithError(t *testing.T) {
 			Domain:  domainValue,
 		},
 	}
-	executionResponse := &admin.Execution{
-		Id: &core.WorkflowExecutionIdentifier{
-			Project: projectValue,
-			Domain:  domainValue,
-			Name:    executionNameValue,
-		},
-		Spec: &admin.ExecutionSpec{
-			LaunchPlan: &core.Identifier{
-				Project: projectValue,
-				Domain:  domainValue,
-				Name:    launchPlanNameValue,
-				Version: launchPlanVersionValue,
-			},
-		},
-		Closure: &admin.ExecutionClosure{
-			WorkflowId: &core.Identifier{
-				Project: projectValue,
-				Domain:  domainValue,
-				Name:    workflowNameValue,
-				Version: workflowVersionValue,
-			},
-			Phase: core.WorkflowExecution_SUCCEEDED,
-		},
-	}
-	var executions []*admin.Execution
-	executions = append(executions, executionResponse)
 	mockClient.OnListExecutionsMatch(ctx, execListRequest).Return(nil, errors.New("executions NotFound"))
 	err := getExecutionFunc(ctx, args, cmdCtx)
 	assert.NotNil(t, err)
@@ -161,8 +137,6 @@ func TestGetExecutionFunc(t *testing.T) {
 			Phase: core.WorkflowExecution_SUCCEEDED,
 		},
 	}
-	var executions []*admin.Execution
-	executions = append(executions, executionResponse)
 	args := []string{executionNameValue}
 	mockClient.OnGetExecutionMatch(ctx, execGetRequest).Return(executionResponse, nil)
 	err := getExecutionFunc(ctx, args, cmdCtx)
@@ -185,32 +159,6 @@ func TestGetExecutionFuncWithError(t *testing.T) {
 			Name:    executionNameValue,
 		},
 	}
-	executionResponse := &admin.Execution{
-		Id: &core.WorkflowExecutionIdentifier{
-			Project: projectValue,
-			Domain:  domainValue,
-			Name:    executionNameValue,
-		},
-		Spec: &admin.ExecutionSpec{
-			LaunchPlan: &core.Identifier{
-				Project: projectValue,
-				Domain:  domainValue,
-				Name:    launchPlanNameValue,
-				Version: launchPlanVersionValue,
-			},
-		},
-		Closure: &admin.ExecutionClosure{
-			WorkflowId: &core.Identifier{
-				Project: projectValue,
-				Domain:  domainValue,
-				Name:    workflowNameValue,
-				Version: workflowVersionValue,
-			},
-			Phase: core.WorkflowExecution_SUCCEEDED,
-		},
-	}
-	var executions []*admin.Execution
-	executions = append(executions, executionResponse)
 	args := []string{executionNameValue}
 	mockClient.OnGetExecutionMatch(ctx, execGetRequest).Return(nil, errors.New("execution NotFound"))
 	err := getExecutionFunc(ctx, args, cmdCtx)

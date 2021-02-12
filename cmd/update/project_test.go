@@ -4,15 +4,17 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/lyft/flytectl/cmd/config"
-	cmdCore "github.com/lyft/flytectl/cmd/core"
-	"github.com/lyft/flyteidl/clients/go/admin/mocks"
-	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/admin"
-	"github.com/stretchr/testify/assert"
 	"io"
 	"log"
 	"os"
 	"testing"
+
+	"github.com/lyft/flytectl/cmd/config"
+	cmdCore "github.com/lyft/flytectl/cmd/core"
+	"github.com/lyft/flyteidl/clients/go/admin/mocks"
+	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/admin"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const projectValue = "dummyProject"
@@ -80,7 +82,7 @@ func TestActivateProjectFuncWithError(t *testing.T) {
 	setup()
 	defer teardownAndVerify(t, "Project dummyProject failed to get updated to ACTIVE state due to Error Updating Project\n")
 	modifyProjectFlags(&(projectConfig.ArchiveProject), false, &(projectConfig.ActivateProject), true)
-	mockClient.OnUpdateProjectMatch(ctx, projectUpdateRequest).Return(nil, errors.New("Error Updating Project"))
+	mockClient.OnUpdateProjectMatch(ctx, projectUpdateRequest).Return(nil, errors.New("error Updating Project"))
 	err := updateProjectsFunc(ctx, args, cmdCtx)
 	assert.Nil(t, err)
 	mockClient.AssertCalled(t, "UpdateProject", ctx, projectUpdateRequest)
@@ -108,7 +110,7 @@ func TestArchiveProjectFuncWithError(t *testing.T) {
 		Id:    projectValue,
 		State: admin.Project_ARCHIVED,
 	}
-	mockClient.OnUpdateProjectMatch(ctx, projectUpdateRequest).Return(nil, errors.New("Error Updating Project"))
+	mockClient.OnUpdateProjectMatch(ctx, projectUpdateRequest).Return(nil, errors.New("error Updating Project"))
 	err := updateProjectsFunc(ctx, args, cmdCtx)
 	assert.Nil(t, err)
 	mockClient.AssertCalled(t, "UpdateProject", ctx, projectUpdateRequest)

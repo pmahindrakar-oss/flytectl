@@ -2,22 +2,24 @@ package get
 
 import (
 	"context"
-	"github.com/golang/protobuf/proto"
+
 	"github.com/lyft/flytectl/cmd/config"
 	cmdCore "github.com/lyft/flytectl/cmd/core"
 	"github.com/lyft/flytectl/pkg/printer"
 	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/admin"
 	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/core"
 	"github.com/lyft/flytestdlib/logger"
+
+	"github.com/golang/protobuf/proto"
 )
 
 var executionColumns = []printer.Column{
-	{"Name", "$.id.name"},
-	{"Workflow Name", "$.closure.workflowId.name"},
-	{"Type", "$.closure.workflowId.resourceType"},
-	{"Phase", "$.closure.phase"},
-	{"Started", "$.closure.startedAt"},
-	{"Elapsed Time", "$.closure.duration"},
+	{Header: "Name", JSONPath: "$.id.name"},
+	{Header: "Workflow Name", JSONPath: "$.closure.workflowId.name"},
+	{Header: "Type", JSONPath: "$.closure.workflowId.resourceType"},
+	{Header: "Phase", JSONPath: "$.closure.phase"},
+	{Header: "Started", JSONPath: "$.closure.startedAt"},
+	{Header: "Elapsed Time", JSONPath: "$.closure.duration"},
 }
 
 func ExecutionToProtoMessages(l []*admin.Execution) []proto.Message {
@@ -30,7 +32,7 @@ func ExecutionToProtoMessages(l []*admin.Execution) []proto.Message {
 
 func getExecutionFunc(ctx context.Context, args []string, cmdCtx cmdCore.CommandContext) error {
 	adminPrinter := printer.Printer{}
-	var executions []* admin.Execution
+	var executions []*admin.Execution
 	if len(args) > 0 {
 		name := args[0]
 		execution, err := cmdCtx.AdminClient().GetExecution(ctx, &admin.WorkflowExecutionGetRequest{

@@ -89,20 +89,20 @@ func testDecodeSlice_RegisterFilesConfig(t *testing.T, vStringSlice, result inte
 }
 
 func TestRegisterFilesConfig_GetPFlagSet(t *testing.T) {
-	val := RegisterFilesConfig{}
+	val := FilesConfig{}
 	cmdFlags := val.GetPFlagSet("")
 	assert.True(t, cmdFlags.HasFlags())
 }
 
 func TestRegisterFilesConfig_SetFlags(t *testing.T) {
-	actual := RegisterFilesConfig{}
+	actual := FilesConfig{}
 	cmdFlags := actual.GetPFlagSet("")
 	assert.True(t, cmdFlags.HasFlags())
 
 	t.Run("Test_version", func(t *testing.T) {
 		t.Run("DefaultValue", func(t *testing.T) {
 			// Test that default value is set properly
-			if vString, err := cmdFlags.GetString("version"); err == nil {
+			if vString, err := cmdFlags.GetString("Version"); err == nil {
 				assert.Equal(t, string("v1"), vString)
 			} else {
 				assert.FailNow(t, err.Error())
@@ -112,9 +112,9 @@ func TestRegisterFilesConfig_SetFlags(t *testing.T) {
 		t.Run("Override", func(t *testing.T) {
 			testValue := "1"
 
-			cmdFlags.Set("version", testValue)
-			if vString, err := cmdFlags.GetString("version"); err == nil {
-				testDecodeJson_RegisterFilesConfig(t, fmt.Sprintf("%v", vString), &actual.version)
+			cmdFlags.Set("Version", testValue)
+			if vString, err := cmdFlags.GetString("Version"); err == nil {
+				testDecodeJson_RegisterFilesConfig(t, fmt.Sprintf("%v", vString), &actual.Version)
 
 			} else {
 				assert.FailNow(t, err.Error())
@@ -124,7 +124,7 @@ func TestRegisterFilesConfig_SetFlags(t *testing.T) {
 	t.Run("Test_skipOnError", func(t *testing.T) {
 		t.Run("DefaultValue", func(t *testing.T) {
 			// Test that default value is set properly
-			if vBool, err := cmdFlags.GetBool("skipOnError"); err == nil {
+			if vBool, err := cmdFlags.GetBool("SkipOnError"); err == nil {
 				assert.Equal(t, bool(*new(bool)), vBool)
 			} else {
 				assert.FailNow(t, err.Error())
@@ -134,9 +134,9 @@ func TestRegisterFilesConfig_SetFlags(t *testing.T) {
 		t.Run("Override", func(t *testing.T) {
 			testValue := "1"
 
-			cmdFlags.Set("skipOnError", testValue)
-			if vBool, err := cmdFlags.GetBool("skipOnError"); err == nil {
-				testDecodeJson_RegisterFilesConfig(t, fmt.Sprintf("%v", vBool), &actual.skipOnError)
+			cmdFlags.Set("SkipOnError", testValue)
+			if vBool, err := cmdFlags.GetBool("SkipOnError"); err == nil {
+				testDecodeJson_RegisterFilesConfig(t, fmt.Sprintf("%v", vBool), &actual.SkipOnError)
 
 			} else {
 				assert.FailNow(t, err.Error())

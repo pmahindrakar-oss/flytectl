@@ -3,12 +3,12 @@ package cmdcore
 import (
 	"context"
 	"fmt"
-	"github.com/spf13/pflag"
-
-	"github.com/lyft/flyteidl/clients/go/admin"
-	"github.com/spf13/cobra"
 
 	"github.com/lyft/flytectl/cmd/config"
+	"github.com/lyft/flyteidl/clients/go/admin"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
 type PFlagProvider interface {

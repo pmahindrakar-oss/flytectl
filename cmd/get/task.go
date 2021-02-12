@@ -2,25 +2,24 @@ package get
 
 import (
 	"context"
-	"github.com/golang/protobuf/proto"
-	"github.com/lyft/flytestdlib/logger"
-
-	"github.com/lyft/flytectl/pkg/adminutils"
-	"github.com/lyft/flytectl/pkg/printer"
 
 	"github.com/lyft/flytectl/cmd/config"
 	cmdCore "github.com/lyft/flytectl/cmd/core"
-
+	"github.com/lyft/flytectl/pkg/adminutils"
+	"github.com/lyft/flytectl/pkg/printer"
 	"github.com/lyft/flyteidl/gen/pb-go/flyteidl/admin"
+	"github.com/lyft/flytestdlib/logger"
+
+	"github.com/golang/protobuf/proto"
 )
 
 var taskColumns = []printer.Column{
-	{"Version", "$.id.version"},
-	{"Name", "$.id.name"},
-	{"Type", "$.closure.compiledTask.template.type"},
-	{"Discoverable", "$.closure.compiledTask.template.metadata.discoverable"},
-	{"Discovery Version", "$.closure.compiledTask.template.metadata.discoveryVersion"},
-	{"Created At", "$.closure.createdAt"},
+	{Header: "Version", JSONPath: "$.id.version"},
+	{Header: "Name", JSONPath: "$.id.name"},
+	{Header: "Type", JSONPath: "$.closure.compiledTask.template.type"},
+	{Header: "Discoverable", JSONPath: "$.closure.compiledTask.template.metadata.discoverable"},
+	{Header: "Discovery Version", JSONPath: "$.closure.compiledTask.template.metadata.discoveryVersion"},
+	{Header: "Created At", JSONPath: "$.closure.createdAt"},
 }
 
 func TaskToProtoMessages(l []*admin.Task) []proto.Message {
