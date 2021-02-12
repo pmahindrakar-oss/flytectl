@@ -20,6 +20,6 @@ func TestRegisterCommand(t *testing.T) {
 		return cmdNouns[i].Use < cmdNouns[j].Use
 	})
 	assert.Equal(t, "files", cmdNouns[0].Use)
-	assert.Equal(t,  []string{"file"}, cmdNouns[0].Aliases)
+	assert.Equal(t, []string{"file"}, cmdNouns[0].Aliases)
 	assert.Equal(t, "Registers file resources", cmdNouns[0].Short)
 }
